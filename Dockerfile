@@ -24,11 +24,13 @@ RUN mkdir -p /sdk \
 FROM distro
 ARG ESP8266_RTOS_SDK_VERSION
 ARG XTENSA_LX106_RELEASE
-ENV PATH /opt/toolchains/esp32/bin:/opt/toolchains/lx106/bin:$PATH
+ENV PATH /opt/sdk/tools:/opt/toolchains/esp32/bin:/opt/toolchains/lx106/bin:$PATH
 ENV IDF_PATH=/opt/sdk
 COPY --from=toolchains /toolchains /opt/toolchains
 COPY --from=sdk /sdk /opt/sdk
-RUN apt-get install -y \
+RUN apt-get clean && \
+    apt-get update -y && \
+    apt-get install -y \
         gcc \
         git \
         wget \
@@ -43,6 +45,9 @@ RUN apt-get install -y \
     && update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 10 \
     && pip install --user --upgrade pip \
     && pip install --user -r /opt/sdk/requirements.txt
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
+                    cmake
 
 LABEL ESP8266_RTOS_SDK_VERSION=$ESP8266_RTOS_SDK_VERSION \
       XTENSA_LX106_RELEASE=$XTENSA_LX106_RELEASE

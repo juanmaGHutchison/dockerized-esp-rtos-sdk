@@ -18,6 +18,9 @@ Given `$PROJECT_ROOT_DIR` holds the absolute path to your project's codebase:
 ## Monitor the ESP chip's serial output
 `docker run -it --rm -v $PROJECT_ROOT_DIR:/project --privileged -v /dev:/dev -w /project mbenabda/esp8266-rtos-sdk make monitor`
 
+## Configure your project from scratch
+`docker run -it --rm -v $PROJECT_ROOT_DIR:/project -w /project mbenabda/esp8266-rtos-sdk cmake menuconfig .`
+
 ## Build the toolchain docker image
 - clone this repository
 - run
